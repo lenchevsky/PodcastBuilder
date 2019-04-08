@@ -1,0 +1,7 @@
+youtube_channel: "<url>"
+
+podcast_formats:
+  - "apple"
+  - "rss"
+
+database: "<path>"
