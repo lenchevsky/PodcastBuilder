@@ -2,7 +2,7 @@ import yaml, sys, os
 from urllib.error import HTTPError
 from pytube import YouTube, Playlist
 from tinydb import TinyDB, Query
-from podgen import Podcast, Episode, Media
+from podgen import Podcast, Episode, Media, Person, Category
 
 # Loading configuration from config.yaml
 print('Loading configuration...')
@@ -40,7 +40,11 @@ podcast_object = Podcast(
        description=CONFIG['podcast_description'],
        website=CONFIG['podcast_website'],
        explicit=False,
-       image=CONFIG['podcast_image'] 
+       image=CONFIG['podcast_image'],
+       language=CONFIG['podcast_language'],
+       authors=[Person(CONFIG['podcast_author'], CONFIG['podcast_author_email'])],
+       owner=Person(CONFIG['podcast_owner'], CONFIG['podcast_owner_email']),
+       category=Category(CONFIG['podcast_category'],CONFIG['podcast_subcategory']) 
     )
 
 for item in db:
@@ -48,7 +52,7 @@ for item in db:
     podcast_object.add_episode(Episode(title=item['name'], media=Media(web_media_path, os.stat(item['filename']).st_size, type="audio/mpeg")))
 
 # Generating RSS
-podcast_object.rss_file('rss.xml',  minimize=True)
+podcast_object.rss_file(('%s/rss.xml' % CONFIG['data_path']),  minimize=True)
     
 
     
